@@ -1,22 +1,12 @@
 {
-  "name": "my-website",
+  "name": "ltw",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "frontend": "npm --prefix frontend run dev",
+    "backend": "dotnet run --project backend/MyWebsiteAPI",
+    "dev": "concurrently \"npm run frontend\" \"npm run backend\""
   },
   "devDependencies": {
-    "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0",
-    "typescript": "~6.0.3",
-    "vite": "^8.3.4"
-  },
-  "dependencies": {
-    "react": "^19.3.1",
-    "react-dom": "^19.3.1",
-    "react-router": "^8.5.0"
+    "concurrently": "^10.0.6"
   }
 }
