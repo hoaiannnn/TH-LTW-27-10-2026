@@ -87,4 +87,119 @@ public class UsersController : ControllerBase
 
         return NoContent();
     }
+
+    // POST: api/users/register
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(RegisterRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.Email) ||
+            string.IsNullOrWhiteSpace(request.Password))
+        {
+            return BadRequest(new
+            {
+                message = "Email và password không được để trống"
+            });
+        }
+
+        var email = request.Email.Trim().ToLower();
+
+        var existingUser = await _context.Users
+            .FirstOrDefaultAsync(u => u.Email == email);
+
+        if (existingUser != null)
+        {
+            return BadRequest(new
+            {
+                message = "Email đã tồn tại"
+            });
+        }
+
+        var user = new User
+        {
+            FullName = request.FullName,
+            Email = email,
+            Age = request.Age,
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password)
+        };
+
+        _context.Users.Add(user);
+
+        await _context.SaveChangesAsync();
+
+        return Ok(new
+        {
+            message = "Đăng ký thành công",
+            user = new
+            {
+                user.Id,
+                user.FullName,
+                user.Email,
+                user.Age
+            }
+        });
+    }
+
+    // POST: api/users/login
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(LoginRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.Email) ||
+            string.IsNullOrWhiteSpace(request.Password))
+        {
+            return BadRequest(new
+            {
+                message = "Email và password không được để trống"
+            });
+        }
+
+        var email = request.Email.Trim().ToLower();
+
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Email == email);
+
+        if (user == null)
+        {
+            return Unauthorized(new
+            {
+                message = "Email hoặc password không đúng"
+            });
+        }
+
+        bool passwordCorrect = false;
+        try
+        {
+            if (!string.IsNullOrEmpty(user.PasswordHash))
+            {
+                passwordCorrect = BCrypt.Net.BCrypt.Verify(
+                    request.Password,
+                    user.PasswordHash
+                );
+            }
+        }
+        catch
+        {
+            passwordCorrect = false;
+        }
+
+        if (!passwordCorrect)
+        {
+            return Unauthorized(new
+            {
+                message = "Email hoặc password không đúng"
+            });
+        }
+
+        return Ok(new
+        {
+            message = "Đăng nhập thành công",
+
+            user = new
+            {
+                user.Id,
+                user.FullName,
+                user.Email,
+                user.Age
+            }
+        });
+    }
 }

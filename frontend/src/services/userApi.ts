@@ -41,3 +41,28 @@ export const updateUser = (
 export const deleteUser = (id: number) => {
   return API.delete(`/users/${id}`);
 };
+
+export interface RegisterRequest {
+  fullName: string;
+  email: string;
+  password: string;
+  age: number;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface AuthResponse {
+  message: string;
+  user: User;
+}
+
+export const register = (data: RegisterRequest) => {
+  return API.post<AuthResponse>("/users/register", data);
+};
+
+export const login = (data: LoginRequest) => {
+  return API.post<AuthResponse>("/users/login", data);
+};

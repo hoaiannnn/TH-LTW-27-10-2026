@@ -25,7 +25,9 @@ body {
 .btn {
     --height: 30px;
 
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 100px;
     min-width: 100px;
     height: var(--height);
@@ -35,6 +37,14 @@ body {
     font-size: 16px;
     font-weight: 600;
     line-height: 1.75;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn:hover {
+    opacity: 0.9;
 }
 
 /* Header */
@@ -85,6 +95,12 @@ body {
 
 .navbar__link:hover {
     background: #c3c3c3;
+}
+
+.navbar__tion {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .hero {
@@ -171,4 +187,44 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 12px 18px;
+}
+
+.auth {
+  width: 400px;
+  margin: 80px auto;
+}
+
+.auth h1 {
+  margin-bottom: 30px;
+}
+
+.auth form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.auth label {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.auth input {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.auth button {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.auth p {
+  margin-top: 15px;
+}
+
+.auth .error {
+  color: #e53e3e;
+  font-weight: 600;
 }
